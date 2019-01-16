@@ -10,7 +10,9 @@
     <h2>URLS:</h2>
     <ul>
      <% for (key in importedDatabase) { %>
-        <li><%= importedDatabase[key] %> - <%= `/u/${key}` %></li>
+        <li><%= importedDatabase[key] %> - /u/<%= key %> -
+          <form method="POST" action="/urls/<%= key %>/delete"><button>Delete</button></form>
+        </li>
      <% } %>
    </ul>
    <a href="#">Create New URL</a>
