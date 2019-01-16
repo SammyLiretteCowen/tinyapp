@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+  <header>
+  <% include partials/_header %>
+  </header>
+    <h2>URLS:</h2>
+    <ul>
+     <% for (key in importedDatabase) { %>
+        <li><%= importedDatabase[key] %> - <%= `/u/${key}` %></li>
+     <% } %>
+   </ul>
+   <a href="#">Create New URL</a>
+</body>
+</html>
