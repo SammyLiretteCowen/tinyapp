@@ -40,6 +40,12 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect('/urls');
 });
 
+app.post("/urls/:id", (req, res) => {
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect(301, req.params.id);
+});
+
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);

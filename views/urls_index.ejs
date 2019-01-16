@@ -11,7 +11,12 @@
     <ul>
      <% for (key in importedDatabase) { %>
         <li><%= importedDatabase[key] %> - /u/<%= key %> -
-          <form method="POST" action="/urls/<%= key %>/delete"><button>Delete</button></form>
+        <form style="display: inline" action="/urls/<%= key %>">
+          <input type="submit" value="Edit" />
+        </form>
+        <form style="display: inline-block;" method="POST" action="/urls/<%= key %>/delete">
+          <button>Delete</button>
+        </form>
         </li>
      <% } %>
    </ul>
