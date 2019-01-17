@@ -1,2 +1,14 @@
-<!-- views/partials/_header.ejs -->
+<!DOCTYPE html>
 <a href="/urls/">Home</a>
+
+<% if (!username) { %>
+  <form action="/login" method="POST" style="display: inline-block;">
+    <input id="Login" type="text" name="username" placeholder="Enter Your Username">
+    <input type="submit" value="Login">
+  </form>
+<% } else{ %>
+  User: <%= username %>
+  <form action="/logout" method="POST" style="display: inline-block;">
+    <input type="submit" value="Logout">
+  </form>
+<% } %>
