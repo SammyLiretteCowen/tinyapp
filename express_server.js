@@ -18,22 +18,30 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+var userDatabase = {
+  "milkmant": {
+    id: "milkmant",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "shadow88": {
+    id: "shadow88",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  },
+};
 // let cookieInfo = {
 //   'username': req.cookies["username"],
 // };
 
+
+//All GET HTTP Requests
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
-});
-
-app.post("/logout", (req, res) => {
-  res.clearCookie('username')
-  res.redirect('/urls');
+app.get('/register', (req, res) => {
+  res.render('registration');
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -53,9 +61,42 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+app.get("/urls/:id", (req, res) => {
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], username: req.cookies["username"] };
+  res.render("urls_show", templateVars);
+});
+
+app.get("/urls", (req, res) => {
+  let templateVars = { importedDatabase: urlDatabase, username: req.cookies["username"] };
+  res.render("urls_index", templateVars);
+});
+
+
+// All POST HTTP Requests
+app.post('/register', (req, res) => {
+  var userIdGenerated = generateRandomString(10);
+  userDatabase[userIdGenerated] = {};
+  userDatabase[userIdGenerated]['id'] = userIdGenerated;
+  userDatabase[userIdGenerated]['email'] = req.body.email;
+  userDatabase[userIdGenerated]['password'] = req.body.password;
+  res.cookie('user_id', userIdGenerated);
+  res.redirect('/urls');
+  // console.log('the user database:', userDatabase);
+});
+
+
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect('/urls');
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie('username')
+  res.redirect('/urls');
+});
+
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
-  // console.log(urlDatabase);
   res.redirect('/urls');
 });
 
@@ -65,34 +106,24 @@ app.post("/urls/:id", (req, res) => {
   res.redirect(301, req.params.id);
 });
 
-app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], username: req.cookies["username"] };
-  res.render("urls_show", templateVars);
-});
-
 app.post("/urls", (req, res) => {
-  var idGenerated = generateRandomString();
+  var idGenerated = generateRandomString(6);
   urlDatabase[idGenerated] = req.body.longURL;
   res.redirect(`/urls/${idGenerated}`);
 });
 
-app.get("/urls", (req, res) => {
-  let templateVars = { importedDatabase: urlDatabase, username: req.cookies["username"] };
-  res.render("urls_index", templateVars);
-});
 
+//Extra Functionality
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-function generateRandomString() {
+function generateRandomString(num) {
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   var outPut = '';
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < num; i++) {
     var character = possible.charAt(Math.floor(Math.random() * possible.length));
     outPut += character;
   }
   return outPut;
 }
-
-//ttest
