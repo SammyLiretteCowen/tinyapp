@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
+const bcrypt = require('bcrypt');
 
 var app = express();
 var PORT = 8080; // default port 8080
@@ -8,6 +9,12 @@ var PORT = 8080; // default port 8080
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser())
+
+
+// const password = "purple-monkey-dinosaur"; // you will probably this from req.params
+// const hashedPassword = bcrypt.hashSync(password, 10);
+
+
 
 
 app.set("view engine", "ejs")
@@ -104,10 +111,10 @@ app.post('/register', (req, res) => {
       return;
   } else {
     var userIdGenerated = generateRandomString(10);
-    userDatabase[userIdGenerated] = {};
-    userDatabase[userIdGenerated]['id'] = userIdGenerated;
-    userDatabase[userIdGenerated]['email'] = req.body.email;
-    userDatabase[userIdGenerated]['password'] = req.body.password;
+    userDatabase[userIdGenerated] = { id: userIdGenerated, email: req.body.email, password: bcrypt.hashSync(req.body.password, 10) };
+    // userDatabase[userIdGenerated]['id'] = userIdGenerated;
+    // userDatabase[userIdGenerated]['email'] = req.body.email;
+    // userDatabase[userIdGenerated]['password'] = bcrypt.hashSync(req.body.password, 10);
     console.log(userDatabase);
     res.cookie('user_id', userIdGenerated);
     res.redirect('/urls');
@@ -117,23 +124,31 @@ app.post('/register', (req, res) => {
 
 app.post("/login", (req, res) => {
   //Looks For User In Database Iterating Over All User
-  for (user in userDatabase) {
-    if (req.body.email === userDatabase[user].email) {
-      if (req.body.password === userDatabase[user].password) {
+  for (key in userDatabase) {
+    console.log(key);
+    console.log(userDatabase[key].email);
+    if (req.body.email === userDatabase[key].email) {
+      console.log('Emails Matched')
+      if (bcrypt.compareSync(req.body.password, userDatabase[key].password)) {
+        console.log('Regular Password And Hash Matched');
         res.cookie('user_id', userDatabase[user].id);
         res.redirect('/');
         return;
-  //Proper Username But Incorrect Password
-      } else {
-        res.status(403);
-        res.render('login');
-        return;
       }
-    } else {
-      //Couldn't Find User
-      res.status(403);
-      res.render('login');
-      return;
+
+  //Proper Username But Incorrect Password
+      // else {
+      //   console.log('Proper Username But Incorrect Password');
+      //   res.status(403);
+      //   res.render('login');
+      //   return;
+      // }
+    // } else {
+    //   //Couldn't Find User
+    //   console.log('Email Does Not Exist');
+    //   res.status(403);
+    //   res.render('login');
+    //   return;
     }
   }
 });
