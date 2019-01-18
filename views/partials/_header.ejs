@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<a href="/urls/">Home</a>
-
-<% if (!username) { %>
-  <form action="/login" method="POST" style="display: inline-block;">
-    <input id="Login" type="text" name="username" placeholder="Enter Your Username">
-    <input type="submit" value="Login">
-  </form>
+<% if (!userAsAnObject) { %>
+<a href="/register">Register</a>
+<a href="/login">Login</a>
 <% } else{ %>
-  User: <%= username %>
+  User: <%= userAsAnObject.id %>
+  <a href="/urls/">All</a>
+  <a href="/urls/new">New</a>
   <form action="/logout" method="POST" style="display: inline-block;">
     <input type="submit" value="Logout">
   </form>

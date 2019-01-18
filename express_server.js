@@ -20,24 +20,41 @@ var urlDatabase = {
 
 var userDatabase = {
   "milkmant": {
-    id: "milkmant",
+    id: "qwer1234",
     email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
  "shadow88": {
-    id: "shadow88",
+    id: "1234qwer",
     email: "user2@example.com",
     password: "dishwasher-funk"
   },
+  '1234': {
+    id: "4321",
+    email: "1234@1234.com",
+    password: "1234"
+  },
 };
-// let cookieInfo = {
-//   'username': req.cookies["username"],
-// };
 
 
 //All GET HTTP Requests
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  let templateVars = { userAsAnObject: userDatabase[req.cookies["user_id"]] };
+  res.render('homepage', templateVars);
+});
+
+
+
+app.get("/testing", (req, res) => {
+  let templateVars = { userAsAnObject: userDatabase[req.cookies["user_id"]] };
+  res.render('testing', templateVars);
+});
+
+
+
+app.get("/login", (req, res) => {
+  // let templateVars = { userAsAnObject: userDatabase[req.cookies["user_id"]] };
+  res.render('login');
 });
 
 app.get('/register', (req, res) => {
@@ -57,41 +74,71 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies["username"] };
+  let templateVars = { userAsAnObject: userDatabase[req.cookies["user_id"]] };
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], username: req.cookies["username"] };
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], userAsAnObject: userDatabase[req.cookies["user_id"]] };
   res.render("urls_show", templateVars);
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { importedDatabase: urlDatabase, username: req.cookies["username"] };
+  let templateVars = { importedDatabase: urlDatabase, userAsAnObject: userDatabase[req.cookies["user_id"]] };
   res.render("urls_index", templateVars);
 });
 
 
 // All POST HTTP Requests
 app.post('/register', (req, res) => {
-  var userIdGenerated = generateRandomString(10);
-  userDatabase[userIdGenerated] = {};
-  userDatabase[userIdGenerated]['id'] = userIdGenerated;
-  userDatabase[userIdGenerated]['email'] = req.body.email;
-  userDatabase[userIdGenerated]['password'] = req.body.password;
-  res.cookie('user_id', userIdGenerated);
-  res.redirect('/urls');
-  // console.log('the user database:', userDatabase);
+  for (user in userDatabase) {
+    if (req.body.email === userDatabase[user].email) {
+      res.status(400);
+      res.render('registration')
+      return;
+    }
+  }
+  if (!req.body.email || !req.body.password) {
+      res.status(400);
+      res.render('registration');
+      return;
+  } else {
+    var userIdGenerated = generateRandomString(10);
+    userDatabase[userIdGenerated] = {};
+    userDatabase[userIdGenerated]['id'] = userIdGenerated;
+    userDatabase[userIdGenerated]['email'] = req.body.email;
+    userDatabase[userIdGenerated]['password'] = req.body.password;
+    res.cookie('user_id', userIdGenerated);
+    res.redirect('/urls');
+    }
 });
 
 
 app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
+  //Looks For User In Database Iterating Over All User
+  for (user in userDatabase) {
+    if (req.body.email === userDatabase[user].email) {
+      if (req.body.password === userDatabase[user].password) {
+        res.cookie('user_id', userDatabase[user].id);
+        res.redirect('/');
+        return;
+  //Proper Username But Incorrect Password
+      } else {
+        res.status(403);
+        res.render('login');
+        return;
+      }
+    } else {
+      //Couldn't Find User
+      res.status(403);
+      res.render('login');
+      return;
+    }
+  }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username')
+  res.clearCookie('user_id')
   res.redirect('/urls');
 });
 
