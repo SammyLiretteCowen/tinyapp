@@ -14,25 +14,21 @@ app.set("view engine", "ejs")
 
 
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {
+    url: "http://www.lighthouselabs.ca",
+    urlCreator: 'admin',
+  },
+  "9sm5xK": {
+    url: "http://www.google.com",
+    urlCreator: 'admin',
+  },
 };
 
 var userDatabase = {
-  "milkmant": {
-    id: "qwer1234",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
- "shadow88": {
-    id: "1234qwer",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  },
-  '1234': {
-    id: "4321",
-    email: "1234@1234.com",
-    password: "1234"
+  'admin': {
+    id: "admin",
+    email: "admin@admin.com",
+    password: "admin"
   },
 };
 
@@ -62,7 +58,7 @@ app.get('/register', (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  res.redirect(urlDatabase[req.params.shortURL].url);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -74,6 +70,10 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+  if (!req.cookies["user_id"]) {
+    res.redirect('/login');
+    return;
+  }
   let templateVars = { userAsAnObject: userDatabase[req.cookies["user_id"]] };
   res.render("urls_new", templateVars);
 });
@@ -84,7 +84,7 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { importedDatabase: urlDatabase, userAsAnObject: userDatabase[req.cookies["user_id"]] };
+  let templateVars = { importedDatabase: urlsForUser(req.cookies["user_id"]), userAsAnObject: userDatabase[req.cookies["user_id"]] };
   res.render("urls_index", templateVars);
 });
 
@@ -108,6 +108,7 @@ app.post('/register', (req, res) => {
     userDatabase[userIdGenerated]['id'] = userIdGenerated;
     userDatabase[userIdGenerated]['email'] = req.body.email;
     userDatabase[userIdGenerated]['password'] = req.body.password;
+    console.log(userDatabase);
     res.cookie('user_id', userIdGenerated);
     res.redirect('/urls');
     }
@@ -143,19 +144,31 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
-  res.redirect('/urls');
+  if (urlDatabase[req.params.id].urlCreator === req.cookies['user_id']) {
+    delete urlDatabase[req.params.id];
+    res.redirect('/urls');
+  } else {
+    console.log('CANT DELETE THIS');
+    res.status(403);
+    res.redirect('/urls');
+  }
 });
 
 app.post("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
-  urlDatabase[req.params.id] = req.body.longURL;
-  res.redirect(301, req.params.id);
+  if (urlDatabase[req.params.id].urlCreator === req.cookies['user_id']) {
+    let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
+    urlDatabase[req.params.id].url = req.body.longURL;
+    res.redirect(301, req.params.id);
+  } else {
+    console.log('CANT EDIT THIS');
+    res.status(403);
+    res.redirect(req.params.id);
+  }
 });
 
 app.post("/urls", (req, res) => {
   var idGenerated = generateRandomString(6);
-  urlDatabase[idGenerated] = req.body.longURL;
+  urlDatabase[idGenerated] = { url: req.body.longURL, urlCreator: req.cookies['user_id'] };
   res.redirect(`/urls/${idGenerated}`);
 });
 
@@ -173,4 +186,14 @@ function generateRandomString(num) {
     outPut += character;
   }
   return outPut;
+}
+
+function urlsForUser(userFilter) {
+  var filteredList = {};
+  for (key in urlDatabase) {
+    if (urlDatabase[key]['urlCreator'] === userFilter) {
+      filteredList[key] = urlDatabase[key];
+    }
+  }
+  return filteredList;
 }
