@@ -7,14 +7,19 @@
     <header>
     <% include partials/_header %>
     </header>
-      <h2>URLS:</h2>
+    <% if (longURL.urlCreator === userAsAnObject.id) { %>
+      <h2>URL Analytics Page:</h2>
       <ul>
-         <li><%= longURL %> - <%= shortURL %></li>
+         <li><%= longURL.urlCreator %> - <%= shortURL %></li>
       </ul>
       <form action="/urls/<%= shortURL %>" method="POST">
       <label for="longURL">Update The URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
       <input type="submit" value="Submit">
       </form>
+    <% } else { %>
+    You are not the original creator of shortened link /u/<%= shortURL %>.
+    You do not have access to the beautiful content hidden here.
+    <% } %>
   </body>
 </html>

@@ -3,7 +3,7 @@
 <a href="/register">Register</a>
 <a href="/login">Login</a>
 <% } else{ %>
-  User: <%= userAsAnObject.id %>
+  User: <%= userAsAnObject.email %>
   <a href="/urls/">All</a>
   <a href="/urls/new">New</a>
   <form action="/logout" method="POST" style="display: inline-block;">
