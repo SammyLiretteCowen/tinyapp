@@ -1,12 +1,27 @@
 <!DOCTYPE html>
+<head>
+  <style type="text/css">
+      button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      margin: 2px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+  </style>
+</head>
 <% if (!userAsAnObject) { %>
-<a href="/register">Register</a>
-<a href="/login">Login</a>
-<% } else{ %>
-  User: <%= userAsAnObject.email %>
-  <a href="/urls/">All</a>
-  <a href="/urls/new">New</a>
-  <form action="/logout" method="POST" style="display: inline-block;">
-    <input type="submit" value="Logout">
-  </form>
+  <button onclick="window.location.href='/register'">Register</button>
+  <button onclick="window.location.href='/login'">Login</button>
+  <a href="/login">Login</a>
+<% } else { %>
+  <div style="margin:7px">Current User: <%= userAsAnObject.email %></div>
+  <br>
+  <button onclick="window.location.href='/urls/'">My Links</button>
+  <button onclick="window.location.href='/urls/new'">New Link</button>
+  <form action="/logout" method="POST" style="display: inline-block;"><button>Logout</button></form>
 <% } %>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TinyApp</title>
+    <title>TinyApp - Analytics For /u/<%= shortURL %></title>
   </head>
-  <body>
+  <body style="font-size:20px; padding:50px;">
     <header>
     <% include partials/_header %>
     </header>
     <% if (longURL.urlCreator === userAsAnObject.id) { %>
-      <h2>URL Analytics Page:</h2>
+      <h2>Analytics For /u/<%= shortURL %></h2>
       <ul>
-         <li><%= longURL.urlCreator %> - <%= shortURL %></li>
+         <li><%= longURL.url %> - <%= shortURL %></li>
       </ul>
       <form action="/urls/<%= shortURL %>" method="POST">
       <label for="longURL">Update The URL:</label>
@@ -18,8 +18,9 @@
       <input type="submit" value="Submit">
       </form>
     <% } else { %>
-    You are not the original creator of shortened link /u/<%= shortURL %>.
-    You do not have access to the beautiful content hidden here.
+    <p>
+      You are not the original creator of shortened link /u/<%= shortURL %>. You have no access to editing it. Get out of here.
+    </p>
     <% } %>
   </body>
 </html>

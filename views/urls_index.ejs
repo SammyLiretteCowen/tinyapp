@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body style="font-size:20px; padding:50px;">
-  <header>
-  <% include partials/_header %>
-  </header>
-    <h2>URLS:</h2>
-    <ul>
-     <% for (key in importedDatabase) { %>
-        <li><%= importedDatabase[key].url %> - /u/<%= key %> - Creator: <%= importedDatabase[key].urlCreator %>
-        <form style="display: inline" action="/urls/<%= key %>">
-          <input type="submit" value="Edit" />
-        </form>
-        <form style="display: inline-block;" method="POST" action="/urls/<%= key %>/delete">
-          <button>Delete</button>
-        </form>
-        </li>
-     <% } %>
-   </ul>
-   <a href="/urls/new">Create New URL</a>
-</body>
+  <head>
+    <title>TinyApp - Dashboard</title>
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      box-shadow: 5px 5px 4px #888888;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+  </head>
+  <body style="font-size:20px; padding:50px;">
+    <header>
+      <% include partials/_header %>
+    </header>
+      <h2>URLS:</h2>
+      <table style="width:100%">
+        <tr>
+          <th>Full URL</th>
+          <th>Short URL</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      <% for (key in importedDatabase) { %>
+        <tr>
+          <td><%= importedDatabase[key].url %></td>
+          <td>/u/<%= key %></td>
+          <td><form style="display: inline" action="/urls/<%= key %>"><button>Edit</button></form></td>
+          <td><form style="display: inline" method="POST" action="/urls/<%= key %>/delete"><button>Delete</button></form></td>
+        </tr>
+      <% } %>
+      </table>
+    <button style="margin: 15px" onclick="window.location.href='/urls/new'">Create New ShortURL</button>
+  </body>
 </html>
