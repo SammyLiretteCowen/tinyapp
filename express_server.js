@@ -88,6 +88,13 @@ app.get('/urls/:id', (req, res) => {
     res.send('<h2>You Are Not Logged In</h2><a href="/login">Visit Login Page</a>');
     return;
   }
+  if ([req.params.id] === 'new') {
+    res.redirect('/new');
+  }
+  if (!urlDatabase[req.params.id]) {
+    res.send('<h2>No ShortURL Exists For /u/' + [req.params.id] + '</h2><a href="/urls">Visit Dashboard</a>');
+    return;
+  }
   let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], userAsAnObject: userDatabase[req.session.user_id] };
   res.render('urls_show', templateVars);
 });
