@@ -1,11 +1,17 @@
 # TinyApp Generic URL Shortener
 
 TinyApp is a JS full stack web application built with Node and Express that allows users to shorten long URLs.
+## Features
+- Shorten URLS
+- Simple User Database
+- Fast Interface
+
 
 ## Screenshots
 
-![LOGIN](LOGINPAGEPICTUREURL)
-![DASHBOARD](DASHBOARDPICTUREURL)
+![DASHBOARD](https://raw.githubusercontent.com/SammyLiretteCowen/tinyapp/master/docs/screenshot-1.png)
+![ANALYTICS](https://raw.githubusercontent.com/SammyLiretteCowen/tinyapp/master/docs/screenshot-2.png)
+
 
 ## Dependencies
 

@@ -1,0 +1,68 @@
+[33mcommit ec67f24d032099f2a7b6f87d6aeee0f07cc2c6e8[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Fri Jan 18 22:12:17 2019 +0000
+
+    Added encryption of user session cookies.
+
+[33mcommit ddc3c85a61b97f682606d6232d2eb3002a6a1147[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Fri Jan 18 04:32:48 2019 +0000
+
+    Added hashing of passwords
+
+[33mcommit f1906e6997e0231751eea386820d502cf1d86852[m
+Merge: b00dff9 bbc24c4
+Author: Sammy Lirette-Cowen <sammylirettecowen@gmail.com>
+Date:   Thu Jan 17 19:47:46 2019 -0800
+
+    Merge pull request #1 from SammyLiretteCowen/feature/unique-dashboard-per-user
+    
+    Finished unique user experience in their dashboards.
+
+[33mcommit bbc24c4fac338b78a571571d5b2d6cbc12962c89[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Fri Jan 18 03:41:26 2019 +0000
+
+    Finished unique user experience in their dashboards.
+
+[33mcommit b00dff95c6f185ae3e62dcef5e714f2adb8b6e6b[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Fri Jan 18 00:19:16 2019 +0000
+
+    Finished feature/user-registration
+
+[33mcommit 9752a0ef577d167e3e3997425fee60711db04ea2[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Thu Jan 17 20:13:42 2019 +0000
+
+    Added ability for user to register with a registration page.
+
+[33mcommit de0091eaade6163aa1beedf7e11be9668d46243f[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Thu Jan 17 02:05:27 2019 +0000
+
+    0.3.0 Added login/logout fix to all pages as it was crashing them
+
+[33mcommit 4522441ae17fd2f2bbd8b5543e48882640279647[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Thu Jan 17 01:48:07 2019 +0000
+
+    Added login/logout logic on branch.
+
+[33mcommit 5d1195eaee9f4a19a257d1b29e16c0178fb4717e[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Wed Jan 16 22:35:31 2019 +0000
+
+    Added edit feature to url_show and home link in header.
+
+[33mcommit fbb82f18e277fd5ddc9e2fc9cf2ad1d62c8219ec[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Wed Jan 16 20:13:37 2019 +0000
+
+    Added ability to delete urls on urls/ page
+
+[33mcommit 65c187b2d5a4b6af9cbc7e12bae28f535267c96f[m
+Author: SammyLiretteCowen <sammylirettecowen@gmail.com>
+Date:   Wed Jan 16 19:31:30 2019 +0000
+
+    V0.2.1 Allows creation of new shortened url, added Nodemon.
